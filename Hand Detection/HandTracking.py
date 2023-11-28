@@ -12,33 +12,33 @@ class HandDetector():
         self.hands = self.mpHands.Hands(self.mode, self.MaxHands, self.DetectionConfidence, self.TrackConfidence)
         self.mpDraw = mp.solutions.drawing_utils
         
-        def FindHands(self, img, draw = True):
-            ImageRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-            self.Results = self.hands.process(ImageRGB)
-            # print(Results.multi_hand_landmarks)
+    def FindHands(self, img, draw = True):
+        ImageRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        self.Results = self.hands.process(ImageRGB)
+        # print(Results.multi_hand_landmarks)
 
-            if self.Results.multi_hand_landmarks:
-                for HandLandmarks in self.Results.multi_hand_landmarks:
-                    if draw:
-                        self.mpDraw.draw_landmarks(img, HandLandmarks, self.mpHands.HAND_CONNECTIONS)
-            return img
+        if self.Results.multi_hand_landmarks:
+            for HandLandmarks in self.Results.multi_hand_landmarks:
+                if draw:
+                    self.mpDraw.draw_landmarks(img, HandLandmarks, self.mpHands.HAND_CONNECTIONS)
+        return img
 
-        def FindPosition(self, img, HandNumber = 0, draw = True):
-            LandmarkList = []
-            if self.Results.multi_hand_landmarks:
-                MyHand = self.Results.multi_hand_landmarks[HandNumber]
+    def FindPosition(self, img, HandNumber = 0, draw = True):
+        LandmarkList = []
+        if self.Results.multi_hand_landmarks:
+            MyHand = self.Results.multi_hand_landmarks[HandNumber]
                 
-                for LandmarkId, Landmarks in enumerate (MyHand.Landmark):
-                    print(LandmarkId, Landmarks)
-                    Height, Width, Channel = img.shape
-                    xCenter, yCenter = int(Landmarks.x * Width), int(Landmarks.y * Height)
-                    print(LandmarkId, xCenter, yCenter)
-                    LandmarkList.append([LandmarkId, xCenter, yCenter])
+            for LandmarkId, Landmarks in enumerate (MyHand.Landmark):
+                print(LandmarkId, Landmarks)
+                Height, Width, Channel = img.shape
+                xCenter, yCenter = int(Landmarks.x * Width), int(Landmarks.y * Height)
+                print(LandmarkId, xCenter, yCenter)
+                LandmarkList.append([LandmarkId, xCenter, yCenter])
                     
-                    if draw:
-                        cv2.circle(img, (xCenter, yCenter), 15, (255, 0, 255), cv2.FILLED)
+                if draw:
+                    cv2.circle(img, (xCenter, yCenter), 15, (255, 0, 255), cv2.FILLED)
                         
-            return LandmarkList
+        return LandmarkList
     
 def main():
     PrevTime = 0
